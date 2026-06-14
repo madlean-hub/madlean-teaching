@@ -1,13 +1,11 @@
-# madlean-teaching
+# Teaching resources for MadLean
 
-## GitHub configuration
+This repository contains the teaching materials used in Madlean sessions.
 
-To set up your new GitHub repository, follow these steps:
+Here you'll find notes, exercises, and other resources created by us and updated over time as the sessions evolve.
 
-* Under your repository name, click **Settings**.
-* In the **Actions** section of the sidebar, click "General".
-* Check the box **Allow GitHub Actions to create and approve pull requests**.
-* Click the **Pages** section of the settings sidebar.
-* In the **Source** dropdown menu, select "GitHub Actions".
+## How to use this repo
 
-After following the steps above, you can remove this section from the README file.
+Clone the repository and just try to do the exercises yourself! You can also find solutions in the `MadleanTeaching/Solutions/` folder.
+
+Contents and organization of the repo will change a lot over the next few months. So stay updated!
