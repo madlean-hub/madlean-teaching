@@ -1,85 +1,6 @@
 import Mathlib.Tactic
 
-/-!
-# Lógica proposicional
-
-Resuelve los siguientes ejercicios utilizando solo las tácticas
-* `intro`
-* `apply`
-* `exact`
-* `by_contra`
--/
-
-example (P : Prop) : P → P := by
-  intro hP
-  exact hP
-
-example (P Q : Prop) (h : P → Q) (hP : P) : Q := by
-  apply h
-  exact hP
-  -- or `exact h hP`
-
-example (P Q R : Prop) (h1 : P → Q) (h2 : Q → R) : P → R := by
-  intro hP
-  apply h2
-  apply h1
-  exact hP
-
--- Nota: recuerda que `¬P` para Lean es lo mismo que `P → False`
-
-lemma contrarreciproco (P Q : Prop) (h : P → Q) : ¬Q → ¬P := by
-  intro hNQ hP
-  apply hNQ
-  apply h
-  exact hP
-
--- Si no lo has conseguido ya, intenta resolver el ejercicio anterior sin utilizar `by_contra`
-
-lemma P_implica_nonoP (P : Prop) : P → ¬¬P := by
-  intro hp hnp
-  apply hnp
-  exact hp
-
-lemma nonoP_implica_P (P : Prop) : ¬¬P → P := by
-  intro hp
-  by_contra hc
-  apply hp
-  exact hc
-
-lemma contrarreciproco' (P Q : Prop) (h : ¬P → ¬Q) : Q → P := by
-  intro hQ
-  by_contra hP
-  --change (P → False) → Q → False at h
-  apply h -- Reflexiona: ¿por qué esto genera 2 goals?
-  · exact hP
-  · exact hQ
-
-
-/-!
-# Reutilizando resultados
-
-Resuelve los siguientes ejercicios utilizando solo las tácticas
-* `constructor`
-* `intro`
-* `exact`
-
-Para ello, deberás utilizar los resultados que demostraste en el apartado anterior.
-
-Nota: cuando trabajes con dos hipótesis, recuerda utilizar `·`.
--/
-
 variable (P Q : Prop)
-
-lemma P_iff_nonoP : P ↔ ¬¬ P := by
-  constructor
-  · exact P_implica_nonoP P
-  · exact nonoP_implica_P P
-
-example : (P → Q) ↔ (¬Q → ¬P) := by
-  constructor
-  all_goals intro h -- ¿Qué crees que hace la táctica `all_goals`?
-  · exact contrarreciproco P Q h
-  · exact contrarreciproco' Q P h
 
 /-!
 # Propiedades sobre funciones
@@ -199,6 +120,9 @@ antes              | táctica               | después
 `⊢ P x`            | `rw [h]`              | `⊢ P y`
 -------------------|-----------------------|--------------
 `h : P ↔ Q`        |                       |
+`⊢ P y`            | `rw [← h]`            | `⊢ P x`
+-------------------|-----------------------|--------------
+`h : P ↔ Q`        |                       |
 `⊢ P`              | `rw [h]`              | `⊢ Q`
 
 
@@ -213,7 +137,6 @@ para todo x, entonces se cumple para uno concreto. Queremos elegir ese elemento 
 * Utilizamos `rw` para intercambiar objetos que están realcionados mediante una relación
 de equivalencia, por ejemplo igualdad o doble implicación.
 -/
-
 
 -- Ejemplos de estas tácticas
 
@@ -275,3 +198,61 @@ lemma composicion_biyectiva (f : X → Y) (g : Y → Z) (hf : f.Bijective) (hg :
   constructor
   · exact composicion_inyectiva f g hf.1 hg.1
   · exact composicion_sobreyectiva f g hf.2 hg.2
+
+/-!
+## Función inversa
+
+Intenta dar las siguientes definiciones
+
+-/
+variable {f : X → Y} {g : Y → X}
+
+def InversaIzquierda (f : X → Y) (g : Y → X) := ∀ y : Y, f (g y) = y
+def InversaDerecha (f : X → Y) (g : Y → X) := ∀ x : X, g (f x) = x
+def Inversa (f : X → Y) (g : Y → X) := InversaIzquierda f g ∧ InversaDerecha f g
+
+lemma inv_izqd_drch : InversaIzquierda f g ↔ InversaDerecha g f := by
+  constructor
+  · intro invizq
+    exact invizq
+  · intro invdrch
+    exact invdrch
+
+def TieneInversaIzquierda (f : X → Y) := ∃ g : Y → X, InversaIzquierda g f
+def TieneInversaDerecha (f : X → Y) := ∃ g : Y → X, InversaDerecha g f
+def TieneInversa (f : X → Y) := ∃ g : Y → X, Inversa g f
+
+example : TieneInversa (identidad X) := by
+  use identidad X
+  constructor
+  all_goals intro x; rfl
+
+noncomputable def invSurj (f : X → Y) (hf : Surjective f) : Y → X :=
+  fun b => Classical.choose (hf b)
+
+theorem invSurj_invizquierda (h : Surjective f) : InversaIzquierda f (invSurj f h) :=
+  fun b => Classical.choose_spec (h b)
+
+lemma biyectiva_iff_TieneInversa : Bijective f ↔ TieneInversa f := by
+  constructor
+  · intro fbij
+    use invSurj f fbij.surjective
+    constructor
+    · intro x
+      have h : f (invSurj f fbij.surjective (f x)) = f x := by
+        apply invSurj_invizquierda
+      apply fbij.injective h
+    · intro y
+      apply invSurj_invizquierda
+  · intro tiene_inv
+    constructor
+    · intro a b fafb
+      obtain ⟨inv, es_inv⟩ := tiene_inv
+      have h : inv (f a) = inv (f b) := congrArg inv fafb
+      rw [es_inv.1 a] at h
+      rw [es_inv.1 b] at h
+      trivial
+    · intro y
+      obtain ⟨inv, es_inv⟩ := tiene_inv
+      use inv y
+      rw [es_inv.2 y]

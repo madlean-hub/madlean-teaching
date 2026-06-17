@@ -1,61 +1,6 @@
 import Mathlib.Tactic
 
-/-!
-# Lógica proposicional
-
-Resuelve los siguientes ejercicios utilizando solo las tácticas
-* `intro`
-* `apply`
-* `exact`
-* `by_contra`
--/
-
-example (P : Prop) : P → P := by
-  sorry
-
-example (P Q : Prop) (h : P → Q) (hP : P) : Q := by
-  sorry
-
-example (P Q R : Prop) (h1 : P → Q) (h2 : Q → R) : P → R := by
-  sorry
-
--- Nota: recuerda que `¬P` para Lean es lo mismo que `P → False`
-
-lemma contrarreciproco (P Q : Prop) (h : P → Q) : ¬Q → ¬P := by
-  sorry
-
--- Si no lo has conseguido ya, intenta resolver el ejercicio anterior sin utilizar `by_contra`
-
-lemma P_implica_nonoP (P : Prop) : P → ¬¬P := by
-  sorry
-
-lemma nonoP_implica_P (P : Prop) : ¬¬P → P := by
-  sorry
-
-lemma contrarreciproco' (P Q : Prop) (h : ¬P → ¬Q) : Q → P := by
-  sorry
-
-
-/-!
-# Reutilizando resultados
-
-Resuelve los siguientes ejercicios utilizando solo las tácticas
-* `constructor`
-* `intro`
-* `exact`
-
-Para ello, deberás utilizar los resultados que demostraste en el apartado anterior.
-
-Nota: cuando trabajes con dos hipótesis, recuerda utilizar `·`.
--/
-
 variable (P Q : Prop)
-
-lemma P_iff_nonoP : P ↔ ¬¬ P := by
-  sorry
-
-example : (P → Q) ↔ (¬Q → ¬P) := by
-  sorry
 
 /-!
 # Propiedades sobre funciones
@@ -227,4 +172,35 @@ lemma composicion_sobreyectiva (f : X → Y) (g : Y → Z) (hf : f.Surjective) (
 -- Utiliza los dos resultados anteriores para demostrar este último resultado:
 lemma composicion_biyectiva (f : X → Y) (g : Y → Z) (hf : f.Bijective) (hg : g.Bijective) :
     (g ∘ f).Bijective := by
+  sorry
+
+/-!
+## Función inversa
+
+Intenta dar las siguientes definiciones
+
+-/
+variable {f : X → Y} {g : Y → X}
+
+def InversaIzquierda (f : X → Y) (g : Y → X) : Prop := sorry
+def InversaDerecha (f : X → Y) (g : Y → X) : Prop := sorry
+def Inversa (f : X → Y) (g : Y → X) : Prop := sorry
+
+lemma inv_izqd_drch : InversaIzquierda f g ↔ InversaDerecha g f := by
+  sorry
+
+def TieneInversaIzquierda (f : X → Y) : Prop := sorry
+def TieneInversaDerecha (f : X → Y) : Prop := sorry
+def TieneInversa (f : X → Y) : Prop := sorry
+
+example : TieneInversa (identidad X) := by
+  sorry
+
+noncomputable def invSurj (f : X → Y) (hf : Surjective f) : Y → X := sorry
+  -- fun b => Classical.choose (hf b)
+
+theorem invSurj_invizquierda (h : Surjective f) : InversaIzquierda f (invSurj f h) := sorry
+  --fun b => Classical.choose_spec (h b)
+
+lemma biyectiva_iff_TieneInversa : Bijective f ↔ TieneInversa f := by
   sorry
