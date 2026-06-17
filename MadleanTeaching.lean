@@ -1,1 +1,2 @@
-import MadleanTeaching.Basic
+import MadleanTeaching.PropositionalLogic
+import MadleanTeaching.Functions
