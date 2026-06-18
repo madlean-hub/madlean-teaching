@@ -1,85 +1,6 @@
 import Mathlib.Tactic
 
-/-!
-# Lógica proposicional
-
-Resuelve los siguientes ejercicios utilizando solo las tácticas
-* `intro`
-* `apply`
-* `exact`
-* `by_contra`
--/
-
-example (P : Prop) : P → P := by
-  intro hP
-  exact hP
-
-example (P Q : Prop) (h : P → Q) (hP : P) : Q := by
-  apply h
-  exact hP
-  -- or `exact h hP`
-
-example (P Q R : Prop) (h1 : P → Q) (h2 : Q → R) : P → R := by
-  intro hP
-  apply h2
-  apply h1
-  exact hP
-
--- Nota: recuerda que `¬P` para Lean es lo mismo que `P → False`
-
-lemma contrarreciproco (P Q : Prop) (h : P → Q) : ¬Q → ¬P := by
-  intro hNQ hP
-  apply hNQ
-  apply h
-  exact hP
-
--- Si no lo has conseguido ya, intenta resolver el ejercicio anterior sin utilizar `by_contra`
-
-lemma P_implica_nonoP (P : Prop) : P → ¬¬P := by
-  intro hp hnp
-  apply hnp
-  exact hp
-
-lemma nonoP_implica_P (P : Prop) : ¬¬P → P := by
-  intro hp
-  by_contra hc
-  apply hp
-  exact hc
-
-lemma contrarreciproco' (P Q : Prop) (h : ¬P → ¬Q) : Q → P := by
-  intro hQ
-  by_contra hP
-  --change (P → False) → Q → False at h
-  apply h -- Reflexiona: ¿por qué esto genera 2 goals?
-  · exact hP
-  · exact hQ
-
-
-/-!
-# Reutilizando resultados
-
-Resuelve los siguientes ejercicios utilizando solo las tácticas
-* `constructor`
-* `intro`
-* `exact`
-
-Para ello, deberás utilizar los resultados que demostraste en el apartado anterior.
-
-Nota: cuando trabajes con dos hipótesis, recuerda utilizar `·`.
--/
-
 variable (P Q : Prop)
-
-lemma P_iff_nonoP : P ↔ ¬¬ P := by
-  constructor
-  · exact P_implica_nonoP P
-  · exact nonoP_implica_P P
-
-example : (P → Q) ↔ (¬Q → ¬P) := by
-  constructor
-  all_goals intro h -- ¿Qué crees que hace la táctica `all_goals`?
-  · exact contrarreciproco P Q h
-  · exact contrarreciproco' Q P h
 
 /-!
 # Propiedades sobre funciones
@@ -110,11 +31,8 @@ def inyectiva {X Y : Type} (f : X → Y) : Prop :=
 Ejercicio: escribe tu propia definición de función `sobreyectiva` y `biyectiva`.
 -/
 
-variable {X Y : Type} (f : X → Y)
+--def sobreyectiva ...
 
-def sobreyectiva : Prop := ∀ y : Y, ∃ x : X, f x = y
-
-def biyectiva : Prop := inyectiva f ∧ sobreyectiva f
 
 /-!
 ## La función identidad
@@ -156,20 +74,13 @@ def identidad (X : Type) : X → X := fun x ↦ x
 variable (X : Type)
 
 lemma identidad_inyectiva : Injective (identidad X) := by
-  --unfold Injective
-  intro x y h
-  --unfold identidad at h
-  exact h
+  sorry
 
 lemma identidad_sobreyectiva : Surjective (identidad X) := by
-  intro x
-  use x
-  rfl
+  sorry
 
 lemma identidad_biyectiva : Bijective (identidad X) := by
-  constructor
-  · exact identidad_inyectiva X -- Reflexiona: ¿por qué tenemos que poner `X` aquí?
-  · exact identidad_sobreyectiva _ -- ¿Qué crees que hace aquí poner `_`?
+  sorry
 
 
 /-!
@@ -198,6 +109,9 @@ antes              | táctica               | después
 `h : x = y`        |                       |
 `⊢ P x`            | `rw [h]`              | `⊢ P y`
 -------------------|-----------------------|--------------
+`h : x = y`        |                       |
+`⊢ P y`            | `rw [← h]`            | `⊢ P x`
+-------------------|-----------------------|--------------
 `h : P ↔ Q`        |                       |
 `⊢ P`              | `rw [h]`              | `⊢ Q`
 
@@ -213,7 +127,6 @@ para todo x, entonces se cumple para uno concreto. Queremos elegir ese elemento 
 * Utilizamos `rw` para intercambiar objetos que están realcionados mediante una relación
 de equivalencia, por ejemplo igualdad o doble implicación.
 -/
-
 
 -- Ejemplos de estas tácticas
 
@@ -250,28 +163,45 @@ variable {X Y Z : Type}
 
 lemma composicion_inyectiva (f : X → Y) (g : Y → Z) (hf : f.Injective) (hg : g.Injective) :
     (g ∘ f).Injective := by
-  intro x y h
-  --unfold comp at h
-  --unfold Injective at hf hg
-  apply hg at h
-  apply hf at h
-  exact h
+  sorry
 
 lemma composicion_sobreyectiva (f : X → Y) (g : Y → Z) (hf : f.Surjective) (hg : g.Surjective) :
     (g ∘ f).Surjective := by
-  intro z
-  specialize hg z
-  obtain ⟨y, hy⟩ := hg
-  specialize hf y
-  obtain ⟨x, hx⟩ := hf
-  use x
-  unfold comp
-  rw [hx]
-  rw [hy]
+  sorry
 
 -- Utiliza los dos resultados anteriores para demostrar este último resultado:
 lemma composicion_biyectiva (f : X → Y) (g : Y → Z) (hf : f.Bijective) (hg : g.Bijective) :
     (g ∘ f).Bijective := by
-  constructor
-  · exact composicion_inyectiva f g hf.1 hg.1
-  · exact composicion_sobreyectiva f g hf.2 hg.2
+  sorry
+
+/-!
+## Función inversa
+
+Intenta dar las siguientes definiciones
+
+-/
+
+def InversaIzquierda (f : X → Y) (g : Y → X) : Prop := sorry
+def InversaDerecha (f : X → Y) (g : Y → X) : Prop := sorry
+def Inversa (f : X → Y) (g : Y → X) : Prop := sorry
+
+variable {f : X → Y} {g : Y → X}
+
+lemma inv_izqd_drch : InversaIzquierda f g ↔ InversaDerecha g f := by
+  sorry
+
+def TieneInversaIzquierda (f : X → Y) : Prop := sorry
+def TieneInversaDerecha (f : X → Y) : Prop := sorry
+def TieneInversa (f : X → Y) : Prop := sorry
+
+example : TieneInversa (identidad X) := by
+  sorry
+
+noncomputable def invSurj (f : X → Y) (hf : Surjective f) : Y → X := sorry
+  -- fun b => Classical.choose (hf b)
+
+theorem invSurj_invizquierda (h : Surjective f) : InversaIzquierda f (invSurj f h) := sorry
+  --fun b => Classical.choose_spec (h b)
+
+lemma biyectiva_iff_TieneInversa : Bijective f ↔ TieneInversa f := by
+  sorry
