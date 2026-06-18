@@ -205,11 +205,12 @@ lemma composicion_biyectiva (f : X → Y) (g : Y → Z) (hf : f.Bijective) (hg :
 Intenta dar las siguientes definiciones
 
 -/
-variable {f : X → Y} {g : Y → X}
 
 def InversaIzquierda (f : X → Y) (g : Y → X) := ∀ y : Y, f (g y) = y
 def InversaDerecha (f : X → Y) (g : Y → X) := ∀ x : X, g (f x) = x
 def Inversa (f : X → Y) (g : Y → X) := InversaIzquierda f g ∧ InversaDerecha f g
+
+variable {f : X → Y} {g : Y → X}
 
 lemma inv_izqd_drch : InversaIzquierda f g ↔ InversaDerecha g f := by
   constructor

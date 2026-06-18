@@ -180,11 +180,12 @@ lemma composicion_biyectiva (f : X → Y) (g : Y → Z) (hf : f.Bijective) (hg :
 Intenta dar las siguientes definiciones
 
 -/
-variable {f : X → Y} {g : Y → X}
 
 def InversaIzquierda (f : X → Y) (g : Y → X) : Prop := sorry
 def InversaDerecha (f : X → Y) (g : Y → X) : Prop := sorry
 def Inversa (f : X → Y) (g : Y → X) : Prop := sorry
+
+variable {f : X → Y} {g : Y → X}
 
 lemma inv_izqd_drch : InversaIzquierda f g ↔ InversaDerecha g f := by
   sorry
