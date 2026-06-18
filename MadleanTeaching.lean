@@ -1,2 +1,2 @@
-import MadleanTeaching.PropositionalLogic
-import MadleanTeaching.Functions
+import MadleanTeaching.«01_PropositionalLogic»
+import MadleanTeaching.«02_Functions»
