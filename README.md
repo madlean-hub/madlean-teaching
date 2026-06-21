@@ -12,7 +12,7 @@ You can also open the files directly in the Lean4 web editor:
 
 | Topic | Exercises | Solutions |
 |-------|-----------|-----------|
-| Propositional Logic | [Open](https://live.lean-lang.org/#url=https%3A%2F%2Fgithub.com%2Fmadlean-hub%2Fmadlean-teaching%2Fblob%2Ffeature/some-additions%2FMadleanTeaching%2FPropositionalLogic.lean) | [Open](https://live.lean-lang.org/#url=https%3A%2F%2Fgithub.com%2Fmadlean-hub%2Fmadlean-teaching%2Fblob%2Ffeature/some-additions%2FMadleanTeaching%2FSolutions%2FPropositionalLogic.lean) |
-| Functions | [Open](https://live.lean-lang.org/#url=https%3A%2F%2Fgithub.com%2Fmadlean-hub%2Fmadlean-teaching%2Fblob%2Ffeature/some-additions%2FMadleanTeaching%2FFunctions.lean) | [Open](https://live.lean-lang.org/#url=https%3A%2F%2Fgithub.com%2Fmadlean-hub%2Fmadlean-teaching%2Fblob%2Ffeature/some-additions%2FMadleanTeaching%2FSolutions%2FFunctions.lean) |
+| Propositional Logic | [Open](https://live.lean-lang.org/#url=https%3A%2F%2Fgithub.com%2Fmadlean-hub%2Fmadlean-teaching%2Fblob%2Fmain%2FMadleanTeaching%2F01_PropositionalLogic.lean) | [Open](https://live.lean-lang.org/#url=https%3A%2F%2Fgithub.com%2Fmadlean-hub%2Fmadlean-teaching%2Fblob%2Fmain%2FMadleanTeaching%2FSolutions%2F01_PropositionalLogic.lean) |
+| Functions | [Open](https://live.lean-lang.org/#url=https%3A%2F%2Fgithub.com%2Fmadlean-hub%2Fmadlean-teaching%2Fblob%2Fmain%2FMadleanTeaching%2F02_Functions.lean) | [Open](https://live.lean-lang.org/#url=https%3A%2F%2Fgithub.com%2Fmadlean-hub%2Fmadlean-teaching%2Fblob%2Fmain%2FMadleanTeaching%2FSolutions%2F02_Functions.lean) |
 
 Contents and organization of the repo will change a lot over the next few months. So stay updated!
