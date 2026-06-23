@@ -228,11 +228,15 @@ example : TieneInversa (identidad X) := by
   constructor
   all_goals intro x; rfl
 
+--- explicación sobre Classical.choose y noncomputable (aquí o en las notas)
+
 noncomputable def invSurj (f : X → Y) (hf : Surjective f) : Y → X :=
   fun b => Classical.choose (hf b)
 
 theorem invSurj_invizquierda (h : Surjective f) : InversaIzquierda f (invSurj f h) :=
   fun b => Classical.choose_spec (h b)
+
+--- explicar rw ; nota sobre congrArg o sobre `exact?`
 
 lemma biyectiva_iff_TieneInversa : Bijective f ↔ TieneInversa f := by
   constructor
@@ -240,19 +244,16 @@ lemma biyectiva_iff_TieneInversa : Bijective f ↔ TieneInversa f := by
     use invSurj f fbij.surjective
     constructor
     · intro x
-      have h : f (invSurj f fbij.surjective (f x)) = f x := by
-        apply invSurj_invizquierda
-      apply fbij.injective h
+      apply fbij.injective
+      apply invSurj_invizquierda
     · intro y
       apply invSurj_invizquierda
   · intro tiene_inv
     constructor
     · intro a b fafb
       obtain ⟨inv, es_inv⟩ := tiene_inv
-      have h : inv (f a) = inv (f b) := congrArg inv fafb
-      rw [es_inv.1 a] at h
-      rw [es_inv.1 b] at h
-      trivial
+      rw [← es_inv.1 a, ← es_inv.1 b]
+      exact (congrArg inv ∘ fun a ↦ fafb) X -- prueba a usar `exact?` aquí
     · intro y
       obtain ⟨inv, es_inv⟩ := tiene_inv
       use inv y
