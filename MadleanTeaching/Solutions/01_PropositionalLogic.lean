@@ -119,17 +119,15 @@ example : (P ∨ Q) → (Q ∨ P) := by
 
 lemma dne_implica_lem : (∀ P, (¬¬P → P)) → (∀ Q, (Q ∨ ¬Q)) := by
   intro dne q
-  apply dne (q ∨ ¬q)
-  intro h1
-  have nq: ¬q := by
-    intro q
-    exact h1 (Or.inl q)
-  exact h1 (Or.inr nq)
+  apply dne
+  intro h
+  apply h
+  right
+  intro q
+  exact h (Or.inl q)
 
-lemma lem_implica_dne : (∀ Q, (Q ∨ ¬Q)) → (∀ P, (¬¬P → P)) := by
+lemma lem_implica_dne' : (∀ Q, (Q ∨ ¬Q)) → (∀ P, (¬¬P → P)) := by
   intro lem p np
-  have ponp : p ∨ ¬p := lem p
-  rcases ponp with p1 | np1
+  rcases (lem p) with p1 | np1
   · exact p1
-  · have l: False := np np1
-    exact False.elim l
+  · contradiction
