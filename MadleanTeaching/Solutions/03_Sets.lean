@@ -13,19 +13,51 @@ Lista de tácticas que tenemos hasta ahora:
 * `right`
 * `rcases` `with`
 * `contradiction`
+* `assumption`
 * `use`
 * `rfl`
 * `specialize`
 * `obtain`
 * `rw`
 * `unfold`
-
-Nuevas tácticas:
-* `norm_num`
-* `linarith`
-* `exact?`
-to-do: añadir explicación y tabla
 -/
+
+/-!
+# Nuevas tácticas
+
+
+## norm_num
+
+La táctica `norm_num` cierra goals que son afirmaciones numéricas concretas y calculables.
+
+Por ejemplo:
+-/
+
+example : 2 + 2 = 4 := by norm_num
+example : (7 : ℝ) / 2 > 3 := by norm_num
+example : ¬ (5 : ℤ) ∣ 17 := by norm_num
+
+/-
+Sin embargo, `norm_num` necesita que los números sean literales o expresiones cerradas,
+sin variables:
+-/
+
+example (x : ℝ) (hx : x > 0) : x + 2 > 2 := by
+  norm_num -- norm_num consigue que la hipótesis ahora sea x > 0
+  -- pero no la cierra porque no puede trabajar sobre variables
+  assumption
+
+/-
+## Linarith
+
+En el caso en el que tengamos variables en goals con desigualdades lineales, podemos utilizar la
+táctica `linarith`.
+
+Por ejemplo:
+-/
+
+example (x : ℝ) (hx : x > 0) : x + 2 > 2 := by linarith
+example (x y : ℝ) (h1 : 2 * x + y ≤ 10) (h3 : y ≥ 0) : x ≤ 5 := by linarith
 
 /-!
 # El tipo `Set X`
@@ -155,9 +187,29 @@ example (h : A ⊆ B) : Bᶜ ⊆ Aᶜ := by sorry
 
 
 /-
-Una vez los hayas demostrado normalmente, también intenta:
-1. utilizando `exact?`
-2. utilizando leansearch, moogle o loogle
+# Reutilizar MathLib
+
+Estos ejercicios son interesantes para practicar Lean, porque te
+ayudan a familiarizarte con definiciones, igualdad por definición,
+tácticas que hemos aprendido... etc.
+
+Pero, en la práctica, si tuvieras que demostrar este tipo de cosas
+siempre, no sería muy útil tener tantas líneas de código.
+
+## exact?
+
+A partir de ahora queremos reutilizar resultados de Mathlib
+frecuentemente. Existen algunas tácticas que nos ayudan a hacer esto.
+
+La más útil es `exact?`, que busca en Mathlib un lema que cierre el goal actual.
+
+Después puedes pulsar en "aplicar" y te resolverá el ejercicio.
+
+Intenta resolver los ejercicios anteriores de nuevo, utilizando `exact?`.
+
+## Otras herramientas
+
+leansearch, moogle o loogle - to-do
 -/
 
 
